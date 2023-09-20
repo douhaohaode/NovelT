@@ -1,6 +1,0 @@
-
-*.pth
-*.onnx
-*.pyc
-.idea/
-venv/
