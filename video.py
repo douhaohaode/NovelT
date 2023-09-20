@@ -3,8 +3,7 @@ from moviepy.editor import AudioFileClip, ImageClip, CompositeVideoClip
 import tools
 from tts import audio_process
 import random
-
-transform_list = ["non", "let", "right", "up", "down"]
+import constant
 
 size_mapping = {
     "16:9": (1920, 1080),
@@ -29,34 +28,40 @@ class VideoProcessor:
         self.volume = volume
         self.output = output
 
-    def move_up(t):
-        speed = 50
-        y_position = -speed * t
-        return (0, y_position)
 
-    def move_down(t):
-        speed = 50
-        y_position = speed * t
-        return (0, y_position)
-
-    def move_left(t):
-        speed = 50
-        x_position = -speed * t
-        return (x_position, 0)
-
-    def move_right(t):
-        speed = 50
-        x_position = speed * t
-        return (x_position, 0)
-
-    def move_non(t):
-        return (0, 0)
-
-    #  变换核心代码
-    #  >>> clip.set_position(lambda t: ('center', 50+t) )
 
         # 音频生成文件
     def audio_image_to_video(self, audio=None):
+
+        def move_up(t):
+            speed = 50
+            y_position = -speed * t
+            return (0, y_position)
+
+        def move_down(t):
+            speed = 50
+            y_position = speed * t
+            return (0, y_position)
+
+        def move_left(t):
+            speed = 50
+            x_position = -speed * t
+            return (x_position, 0)
+
+        def move_right(t):
+            speed = 50
+            x_position = speed * t
+            return (x_position, 0)
+
+        def move_non(t):
+            return (0, 0)
+
+
+        def move_zoom(t):
+            speed = 50
+            x_position = speed * t
+            y_position = speed * t
+            return (x_position, y_position)
 
         if audio == None :
            audio = AudioFileClip(self.audio_file)
@@ -74,13 +79,32 @@ class VideoProcessor:
         image = image.resize((int(image.size[0] * scale), int(image.size[1] * scale)))  # 调整图像的大小，并将其放置在视频帧中间
         image = image.set_duration(audio.duration).resize((width, height))
 
-        transform_type = self.transform
 
-        if self.transform is None:
-            transform_type = random.choice(["non", "up", "down", "left", "right"])
-        move = getattr(self, f"move_{transform_type}", self.move_non())
 
-        image = image.set_position(("center", "center")).set_position(move)
+        transform_type = constant.transform_dict[self.transform]
+
+        if transform_type is None:
+            transform_type = random.choice(constant.transform_list)
+
+        # if transform_type == "non":
+        #     image = image.set_position(("center", "center")).set_position(move_non)
+        # if transform_type == "left":
+        #     image = image.set_position(("center", "center")).set_position(move_left)
+        # if transform_type == "right":
+        #     image = image.set_position(("center", "center")).set_position(move_right)
+        # if transform_type == "up":
+        #     image = image.set_position(("center", "center")).set_position(move_up)
+        # if transform_type == "down":
+        #     image = image.set_position(("center", "center")).set_position(move_down)
+
+       # 创建一个函数，根据时间 t 计算当前的缩放比例
+        def scale_factor(t):
+            start_scale = 1.0  # 初始大小
+            end_scale = 1.2  # 目标大小
+            return start_scale + (end_scale - start_scale) * t / audio.duration
+        # 创建一个放大效果的视频剪辑，使用函数计算缩放比例
+        image = image.fx(vfx.resize, lambda t: scale_factor(t))
+
         image = image.fadeout(0.1)  # 淡出/淡入  image = image.fadein(1.0)
 
         # 字幕处理
@@ -93,6 +117,7 @@ class VideoProcessor:
         video = CompositeVideoClip([image.set_audio(audio), text], size=(width, height))
         output_file = tools.video_rename()
         video.write_videofile(output_file, codec='libx264', audio_codec='aac', fps=30)
+
 
         # 关闭音频和视频
         image.close()

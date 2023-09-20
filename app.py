@@ -40,8 +40,8 @@ def generate(inp1=None, inp2=None, inp3=None, inp4=None, inp6=None, inp7=None, i
     file_path = video_processor.text_image_to_video()
     return file_path
 
-
-with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
+#theme='freddyaboulton/dracula_revamped'
+with gr.Blocks() as demo:
     with gr.Tab("图像识别"):
         gr.Markdown("图像识别")
         with gr.Row():
