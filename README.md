@@ -5,10 +5,10 @@
 一个简单的推文视频制作工具，基于一些开源工具进行开发。
 
 ## 特征
-   OCR
-   文字转换语音
-   图文视频生成
-   待开发
+- OCR
+- 文字转换语音
+- 图文视频生成
+- 待开发
 
 ## 使用教程
 
@@ -32,9 +32,9 @@ python app.py
 
 ## 三方库:
 感谢下列开源工具排名不分先后
-[gradio](https://github.com/gradio-app/gradio)
-[moviepy](https://github.com/Zulko/moviepy)
-[gfpgan](https://github.com/TencentARC/GFPGAN)
-opencv-python
-pytesseract
-edge_tts
+- [gradio](https://github.com/gradio-app/gradio)
+- [moviepy](https://github.com/Zulko/moviepy)
+- [gfpgan](https://github.com/TencentARC/GFPGAN)
+- opencv-python
+- pytesseract
+- edge_tts
