@@ -43,6 +43,8 @@ sizeArray = ["16:9", "4:3", "1:1", "9:16", "21:9", "32:9"]
 
 transform_list = ["默认", "随机", "左移动", "上移动", "放大"]
 
+transform_random_list = ["left", "up", "zoom"]
+
 transform_dict = {"默认": "non", "随机": None, "左移动": "left", "上移动": "up", "放大": "zoom"}
 
 image_extensions = (".jpg", ".jpeg", ".png")

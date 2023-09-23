@@ -64,7 +64,7 @@ class VideoProcessor:
         # 对image大小的处理
         transform_type = constant.transform_dict[self.transform]
         if transform_type is None:
-            transform_type = random.choice(constant.transform_list)
+            transform_type = random.choice(constant.transform_random_list)
         image_width = width
         image_height = height
         if transform_type == "left":
