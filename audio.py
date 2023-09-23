@@ -1,5 +1,6 @@
 import edge_tts
 
+
 class TTSProcessor:
     def __init__(self, text, voice, output, rate, volume):
         self.text = text

@@ -1,92 +1,107 @@
 import os
-import re
-import pytesseract
-from PIL import Image
-import glob
 import gradio as gr
+import ocr
 
 from video import VideoProcessor
 from tts import audio_process
 import constant
 
-def red_image(image):
-    result = pytesseract.image_to_string(image, lang='chi_sim')
-    return re.sub(r'[\s\n]', '', result)
-    # return re.sub(r'[\s\n]', '', result)
-    # text = pytesseract.image_to_string(image, lang='jpn')
-    # text = pytesseract.image_to_string(image, lang='kor')
-    # text = pytesseract.image_to_string(image, lang='chi_sim')
 
-
-def red_path(image_path):
-    image_extensions = ["*.jpg", "*.jpeg", "*.png", ]
-    image_files = []
-    for extension in image_extensions:
-        pattern = os.path.join(image_path, extension)
-        image_files.extend(glob.glob(pattern))
-
-    result = ''
-    for image_file in image_files:
-        image = Image.open(image_file)
-        text = pytesseract.image_to_string(image, lang='chi_sim')
-        result = result + text
-    return re.sub(r'[\s\n]', '', result)
-
-
-def generate(inp1=None, inp2=None, inp3=None, inp4=None, inp6=None, inp7=None, inp8=None):
-    # 1.输入要转换的文字 2.主播选择 3.音速 4. 音量 5.文件路径以及文件名称 6.图片路径 7.选择尺寸 8.图片特效
+def video_process(inp1=None, inp2=None, inp3=None, inp4=None, inp6=None, inp7=None, inp8=None, inp9=None):
+    repair = False
+    if len(inp9) > 0:
+        repair = True
     video_processor = VideoProcessor(text=inp1, voice=inp2, image_file=inp6, size=inp7, transform=inp8, rate=inp3,
-                                     volume=inp4)
+                                     volume=inp4, repair=repair)
     file_path = video_processor.text_image_to_video()
     return file_path
 
-#theme='freddyaboulton/dracula_revamped'
-with gr.Blocks() as demo:
-    with gr.Tab("图像识别"):
-        gr.Markdown("图像识别")
+
+def batch_proces(inp2=None, inp3=None, inp4=None, inp7=None, inp8=None, inp9=None, inp10=None, inp11=None):
+    with open(inp10, 'r') as text_file:
+        lines = text_file.readlines()
+        image_extensions = constant.image_extensions
+        image_files = [file for file in os.listdir(inp11) if file.endswith(image_extensions)]
+        sorted_image_files = sorted(image_files)
+
+        for line, image_file in zip(lines, sorted_image_files):
+            line = line.strip()
+            image_file_path = os.path.join(inp11, image_file)
+            print(line)
+            print(image_file_path)
+            video_process(line, inp2, inp3, inp4, image_file_path, inp7, inp8, inp9)
+        return constant.finish
+
+
+with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
+    with gr.Tab(constant.ocr_title):
         with gr.Row():
-            inp_pil = gr.Image(type="pil", label="图片")
-            out_text = gr.Textbox(label="识别文字如下:")
-        btn1 = gr.Button("开始ocr")
-        btn1.click(fn=red_image, inputs=inp_pil, outputs=out_text)
+            inp_pil = gr.Image(type="pil", label=constant.image_title)
+            out_text = gr.Textbox(label=constant.ocr_subtitle)
+        btn1 = gr.Button(constant.oct_btn_title)
+        btn1.click(fn=ocr.red_image, inputs=inp_pil, outputs=out_text)
 
         with gr.Row():
-            inp = gr.Textbox(placeholder="请输入路径", label="路径")
-            out = gr.Textbox(label="识别文字如下:")
-        btn = gr.Button("开始ocr")
-        btn.click(fn=red_path, inputs=inp, outputs=out)
+            inp = gr.Textbox(placeholder=constant.path_title, label=constant.path_title)
+            out = gr.Textbox(label=constant.ocr_subtitle)
+        btn = gr.Button(constant.oct_btn_title)
+        btn.click(fn=ocr.red_path, inputs=inp, outputs=out)
 
-    with gr.Tab("文本转语音"):
-        gr.Markdown("文本转音频")
+    with gr.Tab(constant.tts_title):
         with gr.Row():
-            inp1 = gr.Textbox(placeholder="输入要转换的文字?", label="文本")
-            inp2 = gr.Radio(constant.voiceArray, label="主播选择")
+            inp1 = gr.Textbox(placeholder=constant.title_placeholder, label=constant.text_title)
+            inp2 = gr.Radio(constant.voiceArray, label=constant.anchor_title)
             with gr.Column():
-                inp3 = gr.Slider(-50.0, 50.0, value=0.0, label="音速", info="加速-50到+50")
-                inp4 = gr.Slider(-50.0, 50.0, value=0.0, label="音量", info="加速-50到+50")
-            inp5 = gr.Textbox(placeholder="文件以及文件名称", label="文件名称")
-            out = gr.Audio(label="生成的音频", type="filepath")
-        btn = gr.Button("Run")
+                inp3 = gr.Slider(-50.0, 50.0, value=0.0, label=constant.voice_title, info=constant.voice_desc)
+                inp4 = gr.Slider(-50.0, 50.0, value=0.0, label=constant.volume_title, info=constant.volume_desc)
+            inp5 = gr.Textbox(placeholder=constant.file_placeholder_title, label=constant.file_title)
+            out = gr.Audio(label=constant.audio_title, type="filepath")
+        btn = gr.Button(constant.generate_title)
         btn.click(fn=audio_process, inputs=[inp1, inp2, inp3, inp4, inp5], outputs=out)
-        live = True  # 启用队列，允许后台运行处理函数并启用进度跟踪
+        live = True
 
-    with gr.Tab("生成视频"):
+    with gr.Tab(constant.video_title):
         with gr.Row():
-            inp1 = gr.Textbox(placeholder="输入要转换的文字?", label="文本", value="欢迎使用NoveIT工具")
+            inp1 = gr.Textbox(placeholder=constant.title_placeholder, label=constant.text_title,
+                              value=constant.welcome_title)
             with gr.Column():
-                inp6 = gr.Textbox(placeholder="请输入路径", label="图片路径", value='./source/image/1.jpg')
-                inp7 = gr.Radio(constant.sizeArray, label="选择尺寸", value=constant.sizeArray[0])
-                inp8 = gr.Radio(constant.transform_list, label="图片特效", value=constant.transform_list[0])
+                inp6 = gr.Textbox(placeholder=constant.path_subtitle, label=constant.image_path_title,
+                                  value='./source/image/1.jpg')
+                inp7 = gr.Radio(constant.sizeArray, label=constant.size_title, value=constant.sizeArray[0])
+                inp8 = gr.Radio(constant.transform_list, label=constant.transform_title,
+                                value=constant.transform_list[0])
+                inp9 = gr.CheckboxGroup([constant.repair_title], label=constant.cartoon_title)
         with gr.Row():
             with gr.Column():
-                inp2 = gr.Radio(constant.voiceArray, label="主播选择", value=constant.voiceArray[0])
-                inp3 = gr.Slider(-50.0, 50.0, value=0.0, label="音速", info="加速-50到+50")
-                inp4 = gr.Slider(-50.0, 50.0, value=0.0, label="音量", info="加速-50到+50")
-            video_file_path = gr.Video(label="生成的视频", type="filepath")
+                inp2 = gr.Radio(constant.voiceArray, label=constant.anchor_title, value=constant.voiceArray[0])
+                inp3 = gr.Slider(-50.0, 50.0, value=0.0, label=constant.voice_title, info=constant.voice_desc)
+                inp4 = gr.Slider(-50.0, 50.0, value=0.0, label=constant.volume_title, info=constant.volume_desc)
+            video_file_path = gr.Video(label=constant.video_title, type="filepath")
         with gr.Row():
-            video_btn = gr.Button("Run")
-            video_btn.click(fn=generate, inputs=[inp1, inp2, inp3, inp4, inp6, inp7, inp8], outputs=video_file_path)
-    with gr.Tab("一键生成"):
-        gr.Markdown("一键生成")
+            video_btn = gr.Button(constant.generate_title)
+            video_btn.click(fn=video_process, inputs=[inp1, inp2, inp3, inp4, inp6, inp7, inp8, inp9],
+                            outputs=video_file_path)
+    with gr.Tab(constant.batch_title):
+        with gr.Row():
+            inp10 = gr.Textbox(placeholder=constant.path_subtitle, label=constant.text_path_title,
+                               value='./source/image/1.text')
+            inp11 = gr.Textbox(placeholder=constant.path_subtitle, label=constant.image_file_path_title,
+                               value='./source/image/')
+        with gr.Row():
+            with gr.Row():
+                inp2 = gr.Radio(constant.voiceArray, label=constant.anchor_title, value=constant.voiceArray[3])
+                with gr.Column():
+                    inp3 = gr.Slider(-50.0, 50.0, value=15.0, label=constant.voice_title, info=constant.voice_desc)
+                    inp4 = gr.Slider(-50.0, 50.0, value=20.0, label=constant.volume_title, info=constant.volume_desc)
+        with gr.Row():
+            with gr.Row():
+                inp7 = gr.Radio(constant.sizeArray, label=constant.size_title, value=constant.sizeArray[0])
+                inp8 = gr.Radio(constant.transform_list, label=constant.transform_title,
+                                value=constant.transform_list[1])
+            inp9 = gr.CheckboxGroup([constant.repair_title], label=constant.cartoon_title)
+        batch_video_btn = gr.Button(constant.generate_title)
+        batch_out = gr.Textbox(label=constant.progress_title)
+        batch_video_btn.click(fn=batch_proces, inputs=[inp2, inp3, inp4, inp7, inp8, inp9, inp10, inp11],
+                              outputs=batch_out)
 
 demo.launch()

@@ -1,31 +1,14 @@
 import edge_tts
 import asyncio
-
 import tools
-
-voiceMap = {
-    "潇潇": "zh-CN-XiaoxiaoNeural",
-    "小艺": "zh-CN-XiaoyiNeural",
-    "云健": "zh-CN-YunjianNeural",
-    "云溪": "zh-CN-YunxiNeural",
-    "云霞": "zh-CN-YunxiaNeural",
-    "云烟": "zh-CN-YunyangNeural",
-    "小贝": "zh-CN-liaoning-XiaobeiNeural",
-    "小妮": "zh-CN-shaanxi-XiaoniNeural",
-    "hiugaai": "zh-HK-HiuGaaiNeural",
-    "hiumaan": "zh-HK-HiuMaanNeural",
-    "wanlung": "zh-HK-WanLungNeural",
-    "hsiaochen": "zh-TW-HsiaoChenNeural",
-    "hsioayu": "zh-TW-HsiaoYuNeural",
-    "yunjhe": "zh-TW-YunJheNeural",
-}
+import constant
 
 
 def audio_process(text, voice, rate, volume, output=None):
     if text is None and voice is None and rate is None and volume is None:
         return None
 
-    voice_name = voiceMap[voice]
+    voice_name = constant.voiceMap[voice]
 
     if rate is not None and rate > 0.0:
         rate_float = "+" + str(rate) + "%"
@@ -43,7 +26,6 @@ def audio_process(text, voice, rate, volume, output=None):
     tts_processor = TTSProcessor(text, voice_name, output_path, rate_float, volume_float)
     asyncio.run(tts_processor.text_to_speech())
     return output_path
-
 
 
 class TTSProcessor:
