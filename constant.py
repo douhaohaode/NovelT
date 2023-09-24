@@ -39,6 +39,21 @@ size_mapping = {
     "32:9": (2560, 1080),
 }
 
+merge_array = ["准备去偷鸡",
+               "200块丢了明天星期一"
+               ]
+
+
+# merge_array = ["今天星期天",
+#                "捡了200块钱",
+#                "准备去偷鸡",
+#                "被发现了",
+#                "壮烈激战",
+#                "挨了不少打",
+#                "还是被我跑了",
+#                "200块丢了明天星期一"
+#                ]
+
 sizeArray = ["16:9", "4:3", "1:1", "9:16", "21:9", "32:9"]
 
 transform_list = ["默认", "随机", "左移动", "上移动", "放大"]
@@ -79,3 +94,8 @@ transform_title = "图片特效"
 cartoon_title = "卡通图片"
 repair_title = "超清"
 welcome_title = "欢迎使用NoveIT工具"
+
+video_merge_title = "视频合成"
+video_merge_file_title = "视频集合路径"
+
+background_audio_title = "背景音乐"

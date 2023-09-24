@@ -78,3 +78,9 @@ def font_size():
     if 32 / 9:
         return 50
     return 44
+
+def background_audio(title):
+    directory = os.path.dirname(os.path.abspath(__file__))
+    file_path = f"source/asset/mp3/{title}.mp3"
+    file_name = os.path.join(directory, file_path)
+    return file_name

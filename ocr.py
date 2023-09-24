@@ -1,4 +1,5 @@
 import os
+import re
 
 import pytesseract
 from PIL import Image
@@ -25,11 +26,12 @@ def red_path(image_path):
         pattern = os.path.join(image_path, "*" + extension)
         image_files.extend(glob.glob(pattern))
 
+    sorted_image_files = sorted(image_files)
     # 打印找到的图片文件
     result = ''
-    for image_file in image_files:
+    for image_file in sorted_image_files:
         image = Image.open(image_file)
         text = pytesseract.image_to_string(image, lang='chi_sim')
-        result = result + text
-    # re.sub(r'[\s\n]', '', result)
+        result = result + (re.sub(r'[\s\n]', '', text) + '\n')
     return result
+    #return re.sub(r'[\s\n]', '', result)
