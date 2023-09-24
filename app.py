@@ -116,7 +116,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                 inp12 = gr.Textbox(placeholder=constant.path_subtitle, label=constant.video_merge_file_title,
                                    value='./source/video/')
                 inp13 = gr.Radio(constant.merge_array, label=constant.background_audio_title,
-                                 value=constant.merge_array[6])
+                                 value=constant.merge_array[0])
 
             merge__video_out = gr.Video(label=constant.video_title, type="filepath")
 
