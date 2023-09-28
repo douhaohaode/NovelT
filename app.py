@@ -6,6 +6,8 @@ from video import VideoProcessor
 from tts import audio_process
 import constant
 import video_merge
+import tools
+
 
 def video_process(inp1=None, inp2=None, inp3=None, inp4=None, inp6=None, inp7=None, inp8=None, inp9=None):
     repair = False
@@ -22,9 +24,8 @@ def batch_process(inp2=None, inp3=None, inp4=None, inp7=None, inp8=None, inp9=No
         lines = text_file.readlines()
         image_extensions = constant.image_extensions
         image_files = [file for file in os.listdir(inp11) if file.endswith(image_extensions)]
-        sorted_image_files = sorted(image_files)
-
-        for line, image_file in zip(lines, sorted_image_files):
+        image_files = sorted(image_files, key=tools.extract_number)
+        for line, image_file in zip(lines, image_files):
             line = line.strip()
             image_file_path = os.path.join(inp11, image_file)
             print(line)
@@ -34,25 +35,34 @@ def batch_process(inp2=None, inp3=None, inp4=None, inp7=None, inp8=None, inp9=No
 
 
 def merge_process(inp12=None, inp13=None):
-     if inp12==None and inp13==None :
-         return
-     return video_merge.merge_video(inp12, inp13)
+    if inp12== None and inp13 == None:
+        return
+    return video_merge.merge_video(inp12, inp13)
 
 
 with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
     gr.Markdown(f"### [NovelT](https://github.com/douhaohaode/NovelT)")
     with gr.Tab(constant.ocr_title):
         with gr.Row():
+            ocr_lan = gr.Radio(constant.ocrNameArray, label="识别语言", value=constant.ocrNameArray[0])
+        with gr.Row():
             inp_pil = gr.Image(type="pil", label=constant.image_title)
-            out_text = gr.Textbox(label=constant.ocr_subtitle)
+            out_video_text = gr.Textbox(label=constant.ocr_subtitle)
         btn1 = gr.Button(constant.oct_btn_title)
-        btn1.click(fn=ocr.red_image, inputs=inp_pil, outputs=out_text)
+        btn1.click(fn=ocr.red_image, inputs=[inp_pil, ocr_lan], outputs=out_video_text)
+
+        with gr.Row():
+            inp_video = gr.Video(label=constant.video_title, type="filepath")
+            out_video = gr.Textbox(label=constant.ocr_subtitle, max_lines=9999)
+        btn_video = gr.Button(constant.oct_btn_title)
+        btn_video.click(fn=ocr.red_voide, inputs=[inp_video, ocr_lan], outputs=out_video)
 
         with gr.Row():
             inp = gr.Textbox(placeholder=constant.path_title, label=constant.path_title)
-            out = gr.Textbox(label=constant.ocr_subtitle,max_lines=9999)
+            out = gr.Textbox(label=constant.ocr_subtitle, max_lines=9999)
         btn = gr.Button(constant.oct_btn_title)
-        btn.click(fn=ocr.red_path, inputs=inp, outputs=out)
+        btn.click(fn=ocr.red_path, inputs=[inp, ocr_lan], outputs=out)
+
 
     with gr.Tab(constant.tts_title):
         with gr.Row():
@@ -98,8 +108,8 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
             with gr.Row():
                 inp2 = gr.Radio(constant.voiceArray, label=constant.anchor_title, value=constant.voiceArray[3])
                 with gr.Column():
-                    inp3 = gr.Slider(-50.0, 50.0, value=22.0, label=constant.voice_title, info=constant.voice_desc)
-                    inp4 = gr.Slider(-50.0, 50.0, value=20.0, label=constant.volume_title, info=constant.volume_desc)
+                    inp3 = gr.Slider(-50.0, 50.0, value=25.0, label=constant.voice_title, info=constant.voice_desc)
+                    inp4 = gr.Slider(-50.0, 50.0, value=40.0, label=constant.volume_title, info=constant.volume_desc)
         with gr.Row():
             with gr.Row():
                 inp7 = gr.Radio(constant.sizeArray, label=constant.size_title, value=constant.sizeArray[0])
@@ -116,7 +126,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                 inp12 = gr.Textbox(placeholder=constant.path_subtitle, label=constant.video_merge_file_title,
                                    value='./source/video/')
                 inp13 = gr.Radio(constant.merge_array, label=constant.background_audio_title,
-                                 value=constant.merge_array[0])
+                                 value=constant.merge_array[6])
 
             merge__video_out = gr.Video(label=constant.video_title, type="filepath")
 

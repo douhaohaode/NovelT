@@ -92,7 +92,7 @@ class VideoProcessor:
         if transform_type == "zoom":
             image = image.set_position(("center", "center")).fx(vfx.resize, lambda t: move_zoom(t, image.duration))
 
-        image = image.fadeout(0.1)  # 淡出
+        #image = image.fadeout(0.1)  # 淡出
 
         # 字幕处理
         fade_duration = 0.5

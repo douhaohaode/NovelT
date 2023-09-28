@@ -1,8 +1,5 @@
-import os
 
-from moviepy.editor import VideoFileClip, AudioFileClip, concatenate_videoclips, concatenate_audioclips
-from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
-
+from moviepy.editor import *
 import tools
 
 
@@ -29,10 +26,11 @@ def merge_video(video_folder_path, background_audio_name):
     if background_music.duration > final_video.duration or background_music.duration == final_video.duration:
         background_music = background_music.subclip(0, final_video.duration)
     else:
-        num_repeats = int(final_video.duration / background_music.duration) + 1
-        background_music = background_music.fx("audio_loop", n=num_repeats).crossfadein(0.5).crossfadeout(0.5).fx("audio_fadein", 0.5).fx(
-            "audio_fadeout", 0.5)
-    video = CompositeVideoClip([final_video.set_audio(final_audio), final_video.set_audio(background_music.volumex(0.18))])
+        # num_repeats = int(final_video.duration / background_music.duration) + 1
+        # background_music = background_music.fx("audio_loop", n=num_repeats)
+        background_music = afx.audio_loop(background_music, duration=final_audio.duration)
+
+    video = CompositeVideoClip([final_video.set_audio(final_audio), final_video.set_audio(background_music.volumex(0.15))])
 
     # 将背景音乐添加到视频剪辑上
    # video_with_audio = final_video.set_audio(background_music)

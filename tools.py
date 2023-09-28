@@ -1,4 +1,5 @@
 import os
+import re
 import time
 from PIL import Image
 from moviepy.editor import ImageClip
@@ -84,3 +85,14 @@ def background_audio(title):
     file_path = f"source/asset/mp3/{title}.mp3"
     file_name = os.path.join(directory, file_path)
     return file_name
+
+
+
+# 自定义排序函数，从文件名中提取数字并进行比较
+def extract_number(filename):
+    # 使用正则表达式从文件名中提取数字部分
+    match = re.search(r'\d+', filename)
+    if match:
+        return int(match.group())
+    else:
+        return 0  # 如果文件名中没有数字，则返回0
