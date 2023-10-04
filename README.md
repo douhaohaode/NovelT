@@ -32,6 +32,7 @@ python app.py
 ### OCR功能
 
 [地址:pytesseract](https://github.com/tesseract-ocr/tessdoc)
+[地址:PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 
 mac 为例:
 
@@ -58,4 +59,5 @@ brew install tesseract-lang
 - [gfpgan](https://github.com/TencentARC/GFPGAN)
 - opencv-python
 - [pytesseract](https://github.com/tesseract-ocr/tessdoc)
+- [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - edge_tts

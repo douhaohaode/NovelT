@@ -50,7 +50,7 @@ class VideoProcessor:
 
         def move_zoom(t, duration):
             start_scale = 1.0  # 初始大小
-            end_scale = 1.1  # 目标大小
+            end_scale = 1.15  # 目标大小
             return start_scale + (end_scale - start_scale) * t / duration
 
         if audio == None:

@@ -33,11 +33,11 @@ def resize_image(image, scale_factor):
 
 def red_image(image, lang):
     preprocessed_image = preprocess_image(image)
-    #scaled_image = resize_image(preprocessed_image, scale_factor=2.0)
+    # scaled_image = resize_image(preprocessed_image, scale_factor=2.0)
     lang = constant.ocrArray[lang]
     custom_config = f'--psm 6 -l {lang}'
     result = pytesseract.image_to_string(preprocessed_image, config=custom_config)
-    return result
+    return ' '.join(result.split())
 
 
 def red_path(image_path, lang):
@@ -61,33 +61,3 @@ def red_path(image_path, lang):
         result = result + text + '\n'
     return result
     # return re.sub(r'[\s\n]', '', result)
-
-
-def red_voide(video, lang):
-    lang = constant.ocrArray[lang]
-
-    cap = cv2.VideoCapture(video)
-
-    frame_skip = 15 # 每隔5帧处理一次
-    frame_count = 0
-
-    while True:
-        ret, frame = cap.read()
-
-        if not ret:
-            break
-        frame_count += 1
-        # 跳过指定数量的帧
-        if frame_count % frame_skip != 0:
-            continue
-        # 预处理帧
-        # 预处理帧
-        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        _, threshold_frame = cv2.threshold(gray_frame, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        img = Image.fromarray(threshold_frame)
-        text = pytesseract.image_to_string(img, config=lang)
-        print(text)
-    # 释放视频捕获对象和关闭窗口
-    cap.release()
-    cv2.destroyAllWindows()
-    return text

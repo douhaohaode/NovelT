@@ -64,7 +64,10 @@ ocrArray = {"中文": "chi_sim", "英文": "eng", "日文": "jpn", "韩文": "ko
 ocrNameArray = ["中文", "英文", "日文", "韩文"]
 
 finish = "完成"
-ocr_title = "图像识别"
+ocr_title = "文字提取"
+pytesseract_title = "pytesseract"
+paddleocr_title = "paddleocr"
+
 ocr_subtitle = "识别文字如下:"
 oct_btn_title = "开始ocr"
 image_title = "图片"
