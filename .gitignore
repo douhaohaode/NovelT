@@ -1,5 +1,5 @@
 
-*.pth
+#*.pth
 *.onnx
 *.pyc
 .idea/
