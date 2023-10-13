@@ -3,7 +3,7 @@ import edge_tts
 
 class TTSProcessor:
     def __init__(self, text, voice, output, rate, volume):
-        self.text = text
+        self.text = " " + text + " "
         self.voice = voice
         self.output = output
         self.rate = rate

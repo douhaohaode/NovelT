@@ -1,7 +1,8 @@
 
 from moviepy.editor import *
-import tools
 
+import constant
+import novel_tools
 
 def merge_video(video_folder_path, background_audio_name):
     # 获取文件夹中的所有视频文件并按文件名升序排序
@@ -21,7 +22,7 @@ def merge_video(video_folder_path, background_audio_name):
 
 
     # 集成背景音乐
-    background_music = AudioFileClip(tools.background_audio(background_audio_name))
+    background_music = AudioFileClip(novel_tools.background_audio(background_audio_name))
 
     if background_music.duration > final_video.duration or background_music.duration == final_video.duration:
         background_music = background_music.subclip(0, final_video.duration)
@@ -32,10 +33,20 @@ def merge_video(video_folder_path, background_audio_name):
 
     video = CompositeVideoClip([final_video.set_audio(final_audio), final_video.set_audio(background_music.volumex(0.15))])
 
-    # 将背景音乐添加到视频剪辑上
-   # video_with_audio = final_video.set_audio(background_music)
+
+    effcet_video_path = "./source/effcet/effect_video.mp4"
+    if os.path.exists(effcet_video_path):
+        effcet_video = VideoFileClip(effcet_video_path)
+        final_video = concatenate_videoclips([effcet_video, video])
+    else:
+        final_video = video
+
     # 保存合成的视频
-    output_file = tools.video_rename()
-    video.write_videofile(output_file, codec="libx264", audio_codec="aac")
+    output_file = novel_tools.result_rename()
+    final_video.write_videofile(output_file, codec="libx264", audio_codec="aac")
+
+    novel_tools.delete_file(constant.audio_path)
+    novel_tools.delete_file(constant.video_path)
+    novel_tools.delete_file(constant.effcet_path)
     return output_file
 

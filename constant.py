@@ -63,11 +63,13 @@ ocrArray = {"中文": "chi_sim", "英文": "eng", "日文": "jpn", "韩文": "ko
 
 ocrNameArray = ["中文", "英文", "日文", "韩文"]
 
+title_sequence_list = ["None", "word", "video"]
+
+
 finish = "完成"
 ocr_title = "文字提取"
 pytesseract_title = "pytesseract"
 paddleocr_title = "paddleocr"
-
 ocr_subtitle = "识别文字如下:"
 oct_btn_title = "开始ocr"
 image_title = "图片"
@@ -95,9 +97,17 @@ size_title = "选择尺寸"
 transform_title = "图片特效"
 cartoon_title = "卡通图片"
 repair_title = "超清"
+video_corp_title = "尺寸裁剪"
+corp_title = "裁剪"
 welcome_title = "欢迎使用NoveIT工具"
-
 video_merge_title = "视频合成"
 video_merge_file_title = "视频集合路径"
-
 background_audio_title = "背景音乐"
+sequence_label = "片头特效"
+sequence_title = "片头文本"
+
+
+
+audio_path = "./source/audio/"
+video_path = "./source/video/"
+effcet_path = "./source/effcet/"

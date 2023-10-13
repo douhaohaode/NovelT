@@ -1,6 +1,6 @@
 from moviepy.editor import *
 from moviepy.editor import AudioFileClip, CompositeVideoClip
-import tools
+import novel_tools
 from tts import audio_process
 import random
 import constant
@@ -8,7 +8,7 @@ import constant
 
 class VideoProcessor:
     def __init__(self, image_file=None, text=None, size=None, transform=None, audio_file=None
-                 , voice=None, rate=None, volume=None, output=None, repair=False
+                 , voice=None, rate=None, volume=None, output=None, repair=False, corp=False
                  ):
         self.audio_file = audio_file
         self.image_file = image_file
@@ -20,6 +20,7 @@ class VideoProcessor:
         self.volume = volume
         self.output = output
         self.repair = repair
+        self.corp = corp
 
         # 音频生成文件
 
@@ -76,7 +77,7 @@ class VideoProcessor:
             image_width = width - 100
 
         # 图片处理
-        image = tools.resize_image(self.image_file, width, height, self.repair).set_duration(audio.duration).resize(
+        image = novel_tools.resize_image(self.image_file, width, height, self.repair, self.corp).set_duration(audio.duration).resize(
             (image_width, image_height))
 
         if transform_type == "non":
@@ -96,13 +97,13 @@ class VideoProcessor:
 
         # 字幕处理
         fade_duration = 0.5
-        text = TextClip(self.text, font='./source/asset/Songti.ttc', fontsize=tools.font_size(), color='white')
+        text = TextClip(self.text, font='./source/asset/Songti.ttc', fontsize=novel_tools.font_size(), color='white')
         text = text.set_position(("center", 0.84), relative=True).set_duration(image.duration - 1)
         text = text.set_duration(audio.duration).crossfadein(fade_duration).crossfadeout(fade_duration)
 
         # 合成视频
         video = CompositeVideoClip([image.set_audio(audio), text], size=(width, height))
-        output_file = tools.video_rename()
+        output_file = novel_tools.video_rename()
         video.write_videofile(output_file, codec='libx264', audio_codec='aac', fps=30)
 
         # 关闭音频和视频

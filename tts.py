@@ -1,6 +1,6 @@
 import edge_tts
 import asyncio
-import tools
+import novel_tools
 import constant
 
 
@@ -20,7 +20,7 @@ def audio_process(text, voice, rate, volume, output=None):
         volume_float = "-" + str(volume) + "%"
 
     if output == None or output == "":
-        output_path = tools.audio_rename()
+        output_path = novel_tools.audio_rename()
     else:
         output_path = output + ".mp3"
     tts_processor = TTSProcessor(text, voice_name, output_path, rate_float, volume_float)
