@@ -76,19 +76,13 @@ transform_dict = {"默认": "non", "随机": None, "左移动": "left", "上移�
 
 image_extensions = (".jpg", ".jpeg", ".png", ".PNG")
 
-ocrArray = {"中文": "chi_sim", "英文": "eng", "日文": "jpn", "韩文": "kor"}
 
-ocrNameArray = ["中文", "英文", "日文", "韩文"]
 
 title_sequence_list = ["None", "word", "video"]
 
 
 finish = "完成"
-ocr_title = "文字提取"
 pytesseract_title = "pytesseract"
-paddleocr_title = "paddleocr"
-ocr_subtitle = "识别文字如下:"
-oct_btn_title = "开始ocr"
 image_title = "图片"
 path_subtitle = "请输入路径"
 path_title = "路径"

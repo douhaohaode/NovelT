@@ -29,10 +29,6 @@ pip install -r requirements.txt
 python app.py
 ```
 
-### OCR功能
-
-[地址:pytesseract](https://github.com/tesseract-ocr/tessdoc)
-[地址:PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 
 mac 为例:
 
@@ -42,10 +38,7 @@ brew install tesseract
 brew install tesseract-lang
 ```
 
-2.[下载对应语言模型](https://tesseract-ocr.github.io/tessdoc/Data-Files)放到对应位置我的Mac为例:
-```python
-/usr/local/share/tessdata
-```
+
 
 
 ## 字幕功能
@@ -58,6 +51,4 @@ brew install tesseract-lang
 - [moviepy](https://github.com/Zulko/moviepy)
 - [gfpgan](https://github.com/TencentARC/GFPGAN)
 - opencv-python
-- [pytesseract](https://github.com/tesseract-ocr/tessdoc)
-- [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR)
 - edge_tts

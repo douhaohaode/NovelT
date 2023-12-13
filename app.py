@@ -1,6 +1,5 @@
 import os
 import gradio as gr
-import ocr
 import time
 
 from cover import cover
@@ -9,7 +8,6 @@ from tts import audio_process
 import constant
 import video_merge
 import novel_tools
-import paddle_ocr
 import video_effect_text
 import video_effect_video
 
@@ -62,52 +60,6 @@ def merge_process(inp12=None, inp13=None):
 
 with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
     gr.Markdown(f"### [NovelT](https://github.com/douhaohaode/NovelT)")
-    with gr.Tab(constant.ocr_title):
-        with gr.Tab(constant.paddleocr_title):
-            with gr.Row():
-                inp_pil = gr.Image(type="pil", label=constant.image_title)
-                out_video_text = gr.Textbox(label=constant.ocr_subtitle, interactive=True)
-            btn1 = gr.Button(constant.oct_btn_title)
-            btn1.click(fn=paddle_ocr.red_image, inputs=[inp_pil], outputs=out_video_text)
-
-            with gr.Row():
-                inp_video = gr.Video(label=constant.video_title, type="filepath")
-                out_video = gr.Textbox(label=constant.ocr_subtitle, max_lines=9999, interactive=True)
-            btn_video = gr.Button(constant.oct_btn_title)
-            btn_video.click(fn=paddle_ocr.red_voide, inputs=[inp_video], outputs=out_video)
-
-            with gr.Row():
-                inp = gr.Textbox(placeholder=constant.path_title, label=constant.path_title)
-                out = gr.Textbox(label=constant.ocr_subtitle, max_lines=9999, interactive=True)
-            btn = gr.Button(constant.oct_btn_title)
-            btn.click(fn=paddle_ocr.red_path, inputs=[inp], outputs=out)
-
-        with gr.Tab(constant.pytesseract_title):
-            with gr.Row():
-                ocr_lan = gr.Radio(constant.ocrNameArray, label="识别语言", value=constant.ocrNameArray[0])
-            with gr.Row():
-                inp_pil = gr.Image(type="pil", label=constant.image_title)
-                out_video_text = gr.Textbox(label=constant.ocr_subtitle, interactive=True)
-            btn1 = gr.Button(constant.oct_btn_title)
-            btn1.click(fn=ocr.red_image, inputs=[inp_pil, ocr_lan], outputs=out_video_text)
-            with gr.Row():
-                inp = gr.Textbox(placeholder=constant.path_title, label=constant.path_title)
-                out = gr.Textbox(label=constant.ocr_subtitle, max_lines=9999, interactive=True)
-            btn = gr.Button(constant.oct_btn_title)
-            btn.click(fn=ocr.red_path, inputs=[inp, ocr_lan], outputs=out)
-
-    with gr.Tab(constant.tts_title):
-        with gr.Row():
-            inp1 = gr.Textbox(placeholder=constant.title_placeholder, label=constant.text_title)
-            inp2 = gr.Radio(constant.voiceArray, label=constant.anchor_title)
-            with gr.Column():
-                inp3 = gr.Slider(-50.0, 50.0, value=0.0, label=constant.voice_title, info=constant.voice_desc)
-                inp4 = gr.Slider(-50.0, 50.0, value=0.0, label=constant.volume_title, info=constant.volume_desc)
-            inp5 = gr.Textbox(placeholder=constant.file_placeholder_title, label=constant.file_title)
-            out = gr.Audio(label=constant.audio_title, type="filepath")
-        btn = gr.Button(constant.generate_title)
-        btn.click(fn=audio_process, inputs=[inp1, inp2, inp3, inp4, inp5], outputs=out)
-        live = True
 
     with gr.Tab(constant.video_title):
         with gr.Row():
@@ -133,6 +85,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
             video_btn = gr.Button(constant.generate_title)
             video_btn.click(fn=video_process, inputs=[inp1, inp2, inp3, inp4, inp6, inp7, inp8, inp9, inp14],
                             outputs=video_file_path)
+
     with gr.Tab(constant.batch_title):
         with gr.Row():
             inp10 = gr.Textbox(placeholder=constant.path_subtitle, label=constant.text_path_title,
