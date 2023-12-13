@@ -4,8 +4,8 @@ import novel_tools
 from tts import audio_process
 import random
 import constant
-
-
+from PIL import ImageFont
+import re
 class VideoProcessor:
     def __init__(self, image_file=None, text=None, size=None, transform=None, audio_file=None
                  , voice=None, rate=None, volume=None, output=None, repair=False, corp=False
@@ -50,8 +50,8 @@ class VideoProcessor:
             return (0, 0)
 
         def move_zoom(t, duration):
-            start_scale = 1.0  # 初始大小
-            end_scale = 1.15  # 目标大小
+            start_scale = 1.05  # 初始大小
+            end_scale = 1.2  # 目标大小
             return start_scale + (end_scale - start_scale) * t / duration
 
         if audio == None:
@@ -95,16 +95,28 @@ class VideoProcessor:
 
         #image = image.fadeout(0.1)  # 淡出
 
+        text, sounds = novel_tools.text_process(self.text)
         # 字幕处理
         fade_duration = 0.5
-        text = TextClip(self.text, font='./source/asset/Songti.ttc', fontsize=novel_tools.font_size(), color='white')
-        text = text.set_position(("center", 0.84), relative=True).set_duration(image.duration - 1)
-        text = text.set_duration(audio.duration).crossfadein(fade_duration).crossfadeout(fade_duration)
+        sentences = re.split(r'(?<=[.?!。？！，,])', text)
+        sentences = [s.strip() for s in sentences if s.strip()]
 
+        text_clips = []
+
+        for c_text in sentences:
+            rendering_text = remove_trailing_punctuation(c_text)
+            text_clip = TextClip(rendering_text, font='./source/asset/Songti_1.ttc', fontsize=novel_tools.font_size(),
+                            color='white', stroke_color="lightblue", bg_color="black", stroke_width=0.8)
+            text_clip = text_clip.set_duration(test_time(self.text, c_text, audio.duration)).crossfadein(fade_duration).crossfadeout(fade_duration)
+            text_clip = text_clip.set_position(("center", 0.84), relative=True)
+            text_clips.append(text_clip)
+            pass
+        # 合成文本剪辑
+        text_video = concatenate_videoclips(text_clips).set_position(("center", 0.84), relative=True)
         # 合成视频
-        video = CompositeVideoClip([image.set_audio(audio), text], size=(width, height))
+        video = CompositeVideoClip([image.set_audio(audio), text_video], size=(width, height))
         output_file = novel_tools.video_rename()
-        video.write_videofile(output_file, codec='libx264', audio_codec='aac', fps=30)
+        video.write_videofile(output_file, codec='libx264', audio_codec='aac', fps=40)
 
         # 关闭音频和视频
         image.close()
@@ -119,3 +131,22 @@ class VideoProcessor:
         audioFileClip = AudioFileClip(audio_file_output)
         output_file = self.audio_image_to_video(audioFileClip)
         return output_file
+
+
+def test_time(text, c_text, duration):
+    num_sentences = len(text)
+    time_per_sentence = duration / num_sentences
+    return time_per_sentence * len(c_text)
+    pass
+
+
+def remove_trailing_punctuation(text):
+    # 使用正则表达式匹配末尾的标点符号（.?!。？！，,）
+    pattern = r'[.?!。？！，,]+$'
+    match = re.search(pattern, text)
+
+    if match:
+        # 如果找到匹配的标点符号，去掉它
+        text = text[:match.start()]
+
+    return text

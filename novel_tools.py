@@ -3,6 +3,8 @@ import re
 import time
 from PIL import Image
 from moviepy.editor import ImageClip
+
+import constant
 import real_gan
 
 
@@ -12,6 +14,10 @@ def path(path_name, type):
     file_path = f"source/{path_name}/{timestamp}.{type}"
     file_name = os.path.join(directory, file_path)
     return file_name
+
+
+def sound_rename():
+    return path("sound", "mp3")
 
 
 def video_rename():
@@ -119,17 +125,17 @@ def crop_to_fit_screen(image_path, w, h, repair=False):
 
 def font_size():
     if 16 / 9:
-        return 44
+        return 54
     if 4 / 3:
-        return 36
+        return 41
     if 1 / 1:
-        return 32
+        return 37
     if 16 / 9:
-        return 44
+        return 50
     if 16 / 9:
         return 50
     if 32 / 9:
-        return 50
+        return 56
     return 44
 
 
@@ -156,3 +162,42 @@ def delete_file(file_path):
         if os.path.isfile(full_path):
             os.remove(full_path)
             print(f"已删除文件: {full_path}")
+
+
+def text_process(text="{暴力枪}累死爷了 不过已经招收了十名中品灵根{一拳}四十个凡品灵根。"):
+    voice = ""
+    for v in constant.voiceArray:
+        if text.startswith(v + ":"):
+            split_result = text.split(v + ":")
+            if len(split_result) == 2:
+                text = split_result[1]
+                voice = v
+                break
+
+    matches = re.finditer(r'\{([^}]+)\}', text)
+
+    sounds = []
+
+    for match in matches:
+        content = match.group(0)
+        start = match.start()
+        end = match.end()
+        sounds.append((content, start, end))
+
+    # 打印找到的花括号内容和位置
+    for content, start, end in sounds:
+        print(f"内容: {content}, 位置: ({start}, {end})")
+
+    # 从文本中删除花括号内容
+    top = 0
+    for content, start, end in sounds:
+        # text = text[:(start - top)] + text[(end - top):]
+        # top = end - start
+        text = text.replace(content, "")
+    # 打印删除花括号内容后的文本
+    print("删除花括号内容后的文本:", text)
+    if voice == "":
+        return (text, sounds)
+    else:
+        return (voice + ":" + text, sounds)
+

@@ -16,8 +16,8 @@ def process_text(result, n='\n'):
     text = ""
     if result and result[0]:
         for re in result[0]:
-            text = text + re[1][0] + n
-    print(text)
+            text = text + re[1][0]
+    text + n
     return text
 
 
@@ -40,7 +40,7 @@ def red_path(image_path):
     for image_file in sorted_image_files:
         image_np = np.array(Image.open(image_file))
         text = process_text(ocr.ocr(image_np))
-        result_text = result_text + text
+        result_text = result_text + '\n' + text
     return result_text
 
 

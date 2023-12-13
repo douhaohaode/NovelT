@@ -22,7 +22,7 @@ def image_effect(screensize=(1920, 1080), text="穿越到异世界首先要学�
     mp4_files = [file for file in file_list if file.endswith(".mp4")]
     first_six_mp4_files = [os.path.join(effcet_folder, file) for file in mp4_files[:7]]
 
-    clips = [VideoFileClip(n, audio=False).subclip(1, 5) for n in
+    clips = [VideoFileClip(n, audio=False).subclip(1, 6) for n in
              first_six_mp4_files]
 
     sizes = [(w, h),
@@ -52,7 +52,7 @@ def image_effect(screensize=(1920, 1080), text="穿越到异世界首先要学�
         bordered_clip = add_white_border(c, 10)
         comp_clips.append(bordered_clip.set_position(r))
 
-    txtClip = TextClip(text, color='yellow', font='./source/asset/Songti.ttc',
+    txtClip = TextClip(text, color='black', font='./source/asset/Songti.ttc',
                        kerning=5, fontsize=60).set_duration(2.5)
 
     comp_clips.append(txtClip.set_pos('center'))

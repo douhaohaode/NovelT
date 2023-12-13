@@ -31,7 +31,8 @@ def merge_video(video_folder_path, background_audio_name):
         # background_music = background_music.fx("audio_loop", n=num_repeats)
         background_music = afx.audio_loop(background_music, duration=final_audio.duration)
 
-    video = CompositeVideoClip([final_video.set_audio(final_audio), final_video.set_audio(background_music.volumex(0.15))])
+   # video = CompositeVideoClip([final_video.set_audio(final_audio), final_video.set_audio(background_music.volumex(0.15))])
+    video = CompositeVideoClip([final_video.set_audio(final_audio), final_video.set_audio(background_music.volumex(0.10))])
 
 
     effcet_video_path = "./source/effcet/effect_video.mp4"
@@ -49,4 +50,3 @@ def merge_video(video_folder_path, background_audio_name):
     novel_tools.delete_file(constant.video_path)
     novel_tools.delete_file(constant.effcet_path)
     return output_file
-

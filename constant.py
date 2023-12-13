@@ -1,34 +1,51 @@
 voiceMap = {
-    "潇潇": "zh-CN-XiaoxiaoNeural",
-    "小艺": "zh-CN-XiaoyiNeural",
-    "云健": "zh-CN-YunjianNeural",
-    "云溪": "zh-CN-YunxiNeural",
-    "云霞": "zh-CN-YunxiaNeural",
-    "云烟": "zh-CN-YunyangNeural",
-    "小贝": "zh-CN-liaoning-XiaobeiNeural",
-    "小妮": "zh-CN-shaanxi-XiaoniNeural",
-    "hiugaai": "zh-HK-HiuGaaiNeural",
-    "hiumaan": "zh-HK-HiuMaanNeural",
-    "wanlung": "zh-HK-WanLungNeural",
-    "hsiaochen": "zh-TW-HsiaoChenNeural",
-    "hsioayu": "zh-TW-HsiaoYuNeural",
-    "yunjhe": "zh-TW-YunJheNeural",
+    "芊芊": "zh-CN-XiaoxiaoNeural",
+    "马长老": "zh-CN-YunjianNeural",
+    "君常笑": "zh-CN-YunxiNeural",
+    "系统": "zh-CN-YunxiaNeural",
+    "李青阳": "zh-TW-YunJheNeural",
+    "李家主": "zh-CN-YunyangNeural",
+    "吃瓜群众": "zh-CN-liaoning-XiaobeiNeural",
+    "群众": "zh-CN-shaanxi-XiaoniNeural",
+    "娇声公主二号": "zh-CN-XiaoyiNeural",
+    "温柔女主三号": "zh-TW-HsiaoChenNeural",
+    "温柔女主四号": "zh-TW-HsiaoYuNeural",
+    "虎啸宗执事": "zh-CN-YunjianNeural",
+    "大刀帮长老": "zh-CN-YunyangNeural",
+    "管家": "zh-CN-YunjianNeural",
+    "苏锦": "zh-CN-XiaoyiNeural",
+    "女子": "zh-TW-HsiaoChenNeural",
+    "子吟": "zh-CN-YunxiaNeural",
+    "赵熙悦": "zh-CN-XiaoxiaoNeural",
+    "姚月": "zh-TW-HsiaoChenNeural",
+    "韦一怒": "zh-CN-YunyangNeural",
+    "旁白": "zh-CN-YunjianNeural",
+    "路人甲": "zh-CN-YunjianNeural",
 }
 
-voiceArray = ["潇潇",
-              "小艺",
-              "云健",
-              "云溪",
-              "云霞",
-              "云烟",
-              "小贝",
-              "小妮",
-              "hiugaai",
-              "hiumaan",
-              "wanlung",
-              "hsiaochen",
-              "hsioayu",
-              "yunjhe"]
+voiceArray = ["芊芊",
+              "君常笑",
+              "李青阳",
+              "马长老",
+              "李家主",
+              "系统",
+              "老刀疤",
+              "虎啸宗执事",
+              "大刀帮长老",
+              "群众",
+              "吃瓜群众",
+              "娇声公主二号",
+              "温柔女主三号",
+              "温柔女主四号",
+              "管家",
+              "苏锦",
+              "女子",
+              "子吟",
+              "赵熙悦",
+              "姚月",
+              "韦一怒",
+              "旁白",
+              "路人甲"]
 
 size_mapping = {
     "16:9": (1920, 1080),
@@ -57,7 +74,7 @@ transform_random_list = ["left", "up", "zoom"]
 
 transform_dict = {"默认": "non", "随机": None, "左移动": "left", "上移动": "up", "放大": "zoom"}
 
-image_extensions = (".jpg", ".jpeg", ".png")
+image_extensions = (".jpg", ".jpeg", ".png", ".PNG")
 
 ocrArray = {"中文": "chi_sim", "英文": "eng", "日文": "jpn", "韩文": "kor"}
 
@@ -111,3 +128,4 @@ sequence_title = "片头文本"
 audio_path = "./source/audio/"
 video_path = "./source/video/"
 effcet_path = "./source/effcet/"
+sound_path = "./source/asset/sound/"
