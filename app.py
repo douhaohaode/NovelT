@@ -1,4 +1,5 @@
 import os
+
 import gradio as gr
 import time
 
@@ -10,7 +11,7 @@ import video_merge
 import novel_tools
 import video_effect_text
 import video_effect_video
-
+import random
 
 def video_process(inp1=None, inp2=None, inp3=None, inp4=None, inp6=None, inp7=None, inp8=None, inp9=None, inp14=None):
     repair = False
@@ -58,8 +59,64 @@ def merge_process(inp12=None, inp13=None):
     return video_merge.merge_video(inp12, inp13)
 
 
+
+def text(index):
+    int2 = gr.Textbox(label="文文言1违逆啊案", value=index)
+    return int2
+
+def text1(index):
+    int2 = gr.Textbox(label="提示词是提示", value=index)
+    return int2
+
+def fake_gan(index):
+    images = [
+        (random.choice(
+            [
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1151ce9f4b2043de0d2e3b7826127998.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-116b5e92936b766b7fdfc242649337f7.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1163530ca19b5cebe1b002b8ec67b6fc.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1116395d6e6a6581eef8b8038f4c8e55.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-11319be65db395d0e8e6855d18ddcef0.jpg",
+            ]
+        ), f"label {i}")
+        for i in range(3)
+    ]
+    return images
+
+
+arra1 = ["101","201","3","4","5","6","7","8","9","10","11","12","13"]
+
+
+
+
+def gallery(index):
+    gallery = gr.Gallery(
+        label="Generated images", show_label=False, elem_id=("gallery" + index)
+        , columns=[3], rows=[1], object_fit="contain",  height=250 ) #height="auto",
+
+    def my_select(evt: gr.SelectData):
+        print(f"You selected {evt.value} at {evt.index} from {evt.target} and index {index}")
+        print("调用了方法")
+
+    gallery.select(my_select)
+    return gallery
+
+
+
 with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
     gr.Markdown(f"### [NovelT](https://github.com/douhaohaode/NovelT)")
+
+
+    with gr.Tab("文案与图片"):
+        with gr.Column():
+             for a in arra1:
+                 with gr.Row():
+                    text(a)
+                    text1(a)
+                    g = gallery(a)
+                    btn22 = gr.Button("Generate images", scale=0)
+                    btn22.click(fn = fake_gan ,inputs = None , outputs = g)
+                    # merge__video_btn.click(fn=merge_process, inputs=[inp12, inp13], outputs=merge__video_out)
 
     with gr.Tab(constant.video_title):
         with gr.Row():
