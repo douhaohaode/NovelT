@@ -1,5 +1,43 @@
 
 
+voiceMap = {
+    "芊芊": "zh-CN-XiaoxiaoNeural",
+    "马长老": "zh-CN-YunjianNeural",
+    "君常笑": "zh-CN-YunxiNeural",
+    "系统": "zh-CN-YunxiaNeural",
+    "李青阳": "zh-TW-YunJheNeural",
+    "李家主": "zh-CN-YunyangNeural",
+    "吃瓜群众": "zh-CN-liaoning-XiaobeiNeural",
+    "群众": "zh-CN-shaanxi-XiaoniNeural",
+    "娇声公主二号": "zh-CN-XiaoyiNeural",
+    "温柔女主三号": "zh-TW-HsiaoChenNeural",
+    "温柔女主四号": "zh-TW-HsiaoYuNeural",
+    "虎啸宗执事": "zh-CN-YunjianNeural",
+    "大刀帮长老": "zh-CN-YunyangNeural",
+    "管家": "zh-CN-YunjianNeural",
+    "苏锦": "zh-CN-XiaoyiNeural",
+    "女子": "zh-TW-HsiaoChenNeural",
+    "子吟": "zh-CN-YunxiaNeural",
+    "赵熙悦": "zh-CN-XiaoxiaoNeural",
+    "姚月": "zh-TW-HsiaoChenNeural",
+    "韦一怒": "zh-CN-YunyangNeural",
+    "旁白": "zh-CN-YunjianNeural",
+    "路人甲": "zh-CN-YunjianNeural",
+}
+
+
+voice_map_en = {
+    "JennyNeural": "en-US-JennyNeural",
+    "GuyNeural": "en-US-GuyNeural",
+    "AriaNeural": "en-US-AriaNeural",
+    "DavisNeural": "en-US-DavisNeural",
+    "ChristopherNeural": "en-US-ChristopherNeural",
+    "EricNeural": "en-US-EricNeural",
+    "MichelleNeural": "en-US-MichelleNeural",
+    "RogerNeural": "en-US-RogerNeural",
+    "SteffanNeural": "en-US-SteffanNeural",
+}
+
 voiceArray = ["芊芊",
               "君常笑",
               "李青阳",
@@ -25,17 +63,6 @@ voiceArray = ["芊芊",
               "路人甲"]
 
 
-voice_map_en = {
-    "JennyNeural": "en-US-JennyNeural",
-    "GuyNeural": "en-US-GuyNeural",
-    "AriaNeural": "en-US-AriaNeural",
-    "DavisNeural": "en-US-DavisNeural",
-    "ChristopherNeural": "en-US-ChristopherNeural",
-    "EricNeural": "en-US-EricNeural",
-    "MichelleNeural": "en-US-MichelleNeural",
-    "RogerNeural": "en-US-RogerNeural",
-    "SteffanNeural": "en-US-SteffanNeural",
-}
 voice_array_en = [
               "JennyNeural",
               "GuyNeural",

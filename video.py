@@ -8,7 +8,7 @@ from PIL import ImageFont
 import re
 class VideoProcessor:
     def __init__(self, image_file=None, text=None, size=None, transform=None, audio_file=None
-                 , voice=None, rate=None, volume=None, output=None, repair=False, corp=False
+                 , voice=None, rate=None, volume=None, output=None, repair=False, corp=False, language=None
                  ):
         self.audio_file = audio_file
         self.image_file = image_file
@@ -21,6 +21,7 @@ class VideoProcessor:
         self.output = output
         self.repair = repair
         self.corp = corp
+        self.language = language
 
         # 音频生成文件
 
@@ -125,7 +126,7 @@ class VideoProcessor:
         return output_file
 
     def text_image_to_video(self):
-        audio_file_output = audio_process(self.text, self.voice, self.rate, self.volume, self.output)
+        audio_file_output = audio_process(self.text, self.voice, self.rate, self.volume, self.output, self.language)
         if audio_file_output == None:
             return
         audioFileClip = AudioFileClip(audio_file_output)

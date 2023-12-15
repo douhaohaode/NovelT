@@ -5,7 +5,7 @@ import constant
 from sound_effect import sound_effect
 
 
-def audio_process(_text, voice, rate, volume, output=None):
+def audio_process(_text, voice, rate, volume, output=None, language=None):
     if _text is None and voice is None and rate is None and volume is None:
         return None
     text, sounds = novel_tools.text_process(_text)
@@ -13,7 +13,17 @@ def audio_process(_text, voice, rate, volume, output=None):
     # split_result = text.split(':')
     # if len(split_result) == 2:
     #     voice, text = split_result
-    for v in constant.voiceArray:
+    voiceArray = constant.voiceArray
+    voiceMap =  constant.voiceMap
+
+    if language == "en":
+        voiceArray = constant.voice_array_en
+        voiceMap =  constant.voice_map_en
+    if language == "zh":
+        voiceArray = constant.voiceArray
+        voiceMap = constant.voiceMap
+
+    for v in voiceArray:
         if text.startswith(v + ":"):
             split_result = text.split(v + ":")
             if len(split_result) == 2:
@@ -21,8 +31,7 @@ def audio_process(_text, voice, rate, volume, output=None):
                 voice = v
                 break
    ####### 多人语音处理代码
-
-    voice_name = constant.voice_map_en[voice]
+    voice_name = voiceMap[voice]
 
     if rate is not None and rate > 0.0:
         rate_float = "+" + str(rate) + "%"
@@ -47,7 +56,6 @@ def audio_process(_text, voice, rate, volume, output=None):
     asyncio.run(tts_processor.text_to_speech())
     print(text)
     print(sounds)
-
     if len(sounds) > 0:
         return sound_effect(output, output_path, sounds, text)
 

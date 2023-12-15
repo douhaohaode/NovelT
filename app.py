@@ -20,8 +20,14 @@ def video_process(inp1=None, inp2=None, inp3=None, inp4=None, inp6=None, inp7=No
     corp = False
     if len(inp14) > 0:
         corp = True
+    language = "zh"
+    if inp2 in constant.voiceArray:
+        language = "zh"
+    if inp2 in constant.voice_array_en:
+        language = "en"
+
     video_processor = VideoProcessor(text=inp1, voice=inp2, image_file=inp6, size=inp7, transform=inp8, rate=inp3,
-                                     volume=inp4, repair=repair, corp=corp)
+                                     volume=inp4, repair=repair, corp=corp, language=language)
     file_path = video_processor.text_image_to_video()
     return file_path
 
@@ -100,6 +106,7 @@ def gallery(index):
 
 
 
+
 with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
     gr.Markdown(f"### [NovelT](https://github.com/douhaohaode/NovelT)")
 
@@ -127,13 +134,6 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                 with gr.Row():
                     inp9 = gr.CheckboxGroup([constant.repair_title], label=constant.cartoon_title)
                     inp14 = gr.CheckboxGroup([constant.corp_title], label=constant.video_corp_title)
-        with gr.Tab("中文"):
-              inp2 = gr.Radio(constant.voiceArray, label=constant.anchor_title,
-                                    value=constant.voiceArray[0])
-
-        with gr.Tab("英文"):
-              inp2 = gr.Radio(constant.voice_array_en, label=constant.anchor_title,
-                            value=constant.voice_array_en[0])
 
         with gr.Row():
             with gr.Column():
@@ -141,10 +141,22 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                 inp4 = gr.Slider(-50.0, 50.0, value=0.0, label=constant.volume_title, info=constant.volume_desc)
             video_file_path = gr.Video(label=constant.video_title, type="filepath")
 
-        with gr.Row():
-            video_btn = gr.Button(constant.generate_title)
-            video_btn.click(fn=video_process, inputs=[inp1, inp2, inp3, inp4, inp6, inp7, inp8, inp9, inp14],
-                            outputs=video_file_path)
+        with gr.Tab("中文"):
+            with gr.Row():
+                inp_zh = gr.Radio(constant.voiceArray, label=constant.anchor_title,
+                                value=constant.voiceArray[0])
+                video_btn = gr.Button(constant.generate_title)
+                video_btn.click(fn=video_process, inputs=[inp1, inp_zh, inp3, inp4, inp6, inp7, inp8, inp9, inp14],
+                                outputs=video_file_path)
+
+        with gr.Tab("英文"):
+            with gr.Row():
+                inp_en = gr.Radio(constant.voice_array_en, label=constant.anchor_title,
+                                value=constant.voice_array_en[0])
+                video_btn = gr.Button(constant.generate_title)
+                video_btn.click(fn=video_process, inputs=[inp1, inp_en, inp3, inp4, inp6, inp7, inp8, inp9, inp14],
+                                outputs=video_file_path)
+
 
     with gr.Tab(constant.batch_title):
         with gr.Row():
@@ -154,43 +166,56 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                                value='./source/image/')
         with gr.Row():
             with gr.Row():
-                inp2 = gr.Radio(constant.voiceArray, label=constant.anchor_title, value=constant.voiceArray[3])
                 with gr.Column():
                     inp3 = gr.Slider(-50.0, 50.0, value=23.0, label=constant.voice_title, info=constant.voice_desc)
                     inp4 = gr.Slider(-50.0, 50.0, value=40.0, label=constant.volume_title, info=constant.volume_desc)
+
+                with gr.Column():
+                    inp7 = gr.Radio(constant.sizeArray, label=constant.size_title, value=constant.sizeArray[0])
+                    inp8 = gr.Radio(constant.transform_list, label=constant.transform_title,
+                                value=constant.transform_list[1])
+
         with gr.Row():
             with gr.Row():
-                inp7 = gr.Radio(constant.sizeArray, label=constant.size_title, value=constant.sizeArray[0])
-                inp8 = gr.Radio(constant.transform_list, label=constant.transform_title,
-                                value=constant.transform_list[1])
-            with gr.Row():
-                with gr.Row():
+                with gr.Column():
+                    inp12 = gr.Textbox(placeholder=constant.path_subtitle, label=constant.video_merge_file_title,
+                                       value='./source/video/')
+                    inp13 = gr.Radio(constant.merge_array, label=constant.background_audio_title,
+                                     value=constant.merge_array[6])
+                with gr.Column():
                     inp9 = gr.CheckboxGroup([constant.repair_title], label=constant.cartoon_title)
                     inp14 = gr.CheckboxGroup([constant.corp_title], label=constant.video_corp_title)
-                with gr.Column():
-                    inp15 = gr.Textbox(placeholder=constant.title_placeholder, label=constant.sequence_title,
-                                       value=constant.welcome_title)
-                    inp16 = gr.Radio(constant.title_sequence_list, label=constant.sequence_label,
-                                     value=constant.title_sequence_list[0])
+
+                # with gr.Column():
+                #     inp15 = gr.Textbox(placeholder=constant.title_placeholder, label=constant.sequence_title,
+                #                        value=constant.welcome_title)
+                #     inp16 = gr.Radio(constant.title_sequence_list, label=constant.sequence_label,
+                #                      value=constant.title_sequence_list[0])
 
         with gr.Row():
-            with gr.Column():
-                inp12 = gr.Textbox(placeholder=constant.path_subtitle, label=constant.video_merge_file_title,
-                                   value='./source/video/')
-                inp13 = gr.Radio(constant.merge_array, label=constant.background_audio_title,
-                                 value=constant.merge_array[6])
-
             merge__video_out = gr.Video(label=constant.video_title, type="filepath")
 
+            with gr.Tab("中文"):
+                with gr.Column():
+                    inp_zh = gr.Radio(constant.voiceArray, label=constant.anchor_title,
+                                      value=constant.voiceArray[0])
+                    batch_video_btn = gr.Button(constant.generate_title)
+                    batch_video_btn.click(fn=batch_process,
+                                          inputs=[inp_zh, inp3, inp4, inp7, inp8, inp9, inp10, inp11, inp12, inp13, inp14],
+                                          outputs=merge__video_out)
+            with gr.Tab("英文"):
+                with gr.Column():
+                    inp_en = gr.Radio(constant.voice_array_en, label=constant.anchor_title,
+                                      value=constant.voice_array_en[0])
+                    batch_video_btn = gr.Button(constant.generate_title)
+                    batch_video_btn.click(fn=batch_process,
+                                          inputs=[inp_en, inp3, inp4, inp7, inp8, inp9, inp10, inp11, inp12, inp13, inp14],
+                                          outputs=merge__video_out)
 
-        batch_video_btn = gr.Button(constant.generate_title)
-        # batch_out = gr.Textbox(label=constant.progress_title)
-        batch_video_btn.click(fn=batch_process,
-                              inputs=[inp2, inp3, inp4, inp7, inp8, inp9, inp10, inp11, inp12, inp13, inp14, inp15,
-                                      inp16],
-                              outputs=merge__video_out)
 
-        # merge__video_btn = gr.Button(constant.generate_title)
-        # merge__video_btn.click(fn=merge_process, inputs=[inp12, inp13], outputs=merge__video_out)
+
+
+
+
 
 demo.launch()
