@@ -22,7 +22,7 @@ def audio_process(_text, voice, rate, volume, output=None):
                 break
    ####### 多人语音处理代码
 
-    voice_name = constant.voiceMap[voice]
+    voice_name = constant.voice_map_en[voice]
 
     if rate is not None and rate > 0.0:
         rate_float = "+" + str(rate) + "%"
@@ -52,8 +52,6 @@ def audio_process(_text, voice, rate, volume, output=None):
         return sound_effect(output, output_path, sounds, text)
 
     return output_path
-
-
 
 
 class TTSProcessor:
